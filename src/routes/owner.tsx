@@ -1,0 +1,9 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { AppShell, PageIntro, StatCard } from "@/components/vacanza-ui";
+import { useVacanza } from "@/components/vacanza-store";
+import { OwnerPropertyCard } from "@/components/owner-property-card";
+
+export const Route = createFileRoute("/owner")({ head: () => ({ meta: [{ title: "Owner Dashboard — Vacanza" }, { name: "description", content: "Manage rental properties and keep availability status current." }, { property: "og:title", content: "Owner Dashboard — Vacanza" }, { property: "og:description", content: "Manage listings and live availability." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }), component: OwnerDashboard });
+function OwnerDashboard() { const { properties } = useVacanza(); const owned = properties.slice(0,4); return <AppShell><section className="bg-muted/55 py-10"><div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8"><PageIntro eyebrow="Owner workspace" title="Owner Dashboard" copy="Manage your properties and keep availability up to date." action={<Button asChild className="hidden sm:flex"><Link to="/list-property"><Plus />Add property</Link></Button>} /><div className="mt-9 grid grid-cols-3 gap-5 border-y bg-background py-6"><StatCard label="Total Properties" value={owned.length} /><StatCard label="Vacant" value={owned.filter((p) => p.status === "vacant").length} tone="success" /><StatCard label="Full" value={owned.filter((p) => p.status === "full").length} tone="danger" /></div><div className="mt-8 grid gap-5">{owned.map((p) => <OwnerPropertyCard key={p.id} property={p} />)}</div></div></section></AppShell>; }

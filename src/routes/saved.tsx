@@ -1,0 +1,7 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Search } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { AppShell, EmptyState, PageIntro, PropertyCard } from "@/components/vacanza-ui";
+import { useVacanza } from "@/components/vacanza-store";
+export const Route=createFileRoute("/saved")({head:()=>({meta:[{title:"Saved Properties — Vacanza"},{name:"description",content:"Review the rental properties you saved."},{property:"og:title",content:"Saved Properties — Vacanza"},{property:"og:description",content:"Your shortlist with current availability."},{property:"og:type",content:"website"},{name:"twitter:card",content:"summary_large_image"}]}),component:Saved});
+function Saved(){const{properties,saved}=useVacanza();const items=properties.filter(p=>saved.includes(p.id));return <AppShell><section className="py-10"><div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"><PageIntro eyebrow="Your shortlist" title="Saved properties" copy="Availability stays visible, so you know which saved homes are still open." />{items.length?<div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">{items.map(p=><PropertyCard key={p.id} property={p} />)}</div>:<div className="mt-8"><EmptyState title="No saved properties yet" copy="Save homes you like and compare their latest availability here." /><Button asChild className="mx-auto mt-5 flex w-fit"><Link to="/find"><Search />Find a home</Link></Button></div>}</div></section></AppShell>}
